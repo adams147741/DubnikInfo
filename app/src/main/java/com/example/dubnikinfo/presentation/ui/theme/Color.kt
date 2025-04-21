@@ -1,4 +1,4 @@
-package com.example.dubnikinfo.ui.theme
+package com.example.dubnikinfo.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
