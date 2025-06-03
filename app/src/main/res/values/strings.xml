@@ -3,4 +3,6 @@
     <string name="actualities">Aktuality</string>
     <string name="places">Miesta</string>
     <string name="reports">Ohlásenia</string>
+    <string name="trash_collection">Vývoz odpadu</string>
+    <string name="No_actualities">Žiadne aktuality, prebieha načítavanie, alebo neboli načítané!</string>
 </resources>

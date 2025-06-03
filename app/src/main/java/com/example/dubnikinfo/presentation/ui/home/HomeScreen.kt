@@ -30,6 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.example.dubnikinfo.R
 import com.example.dubnikinfo.presentation.ui.navigation.Screen
 
@@ -40,7 +44,8 @@ fun HomeScreen (
     trashIcon: Int,
     trashDate: String,
     modifier: Modifier = Modifier,
-    onCardClick: () -> Unit
+    onCardClick: () -> Unit,
+    navController: NavController,
 ) {
     Scaffold(
         content = { innerPadding ->
@@ -82,7 +87,9 @@ fun HomeScreen (
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        navController.navigate(Screen.Trash.route)
+                    },
                     shape = MaterialTheme.shapes.medium,
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
@@ -121,7 +128,7 @@ fun HomeScreen (
                     R.drawable.news_icon,
                     stringResource(R.string.actualities),
                     modifier = Modifier.clickable {
-                        onCardClick()
+                        navController.navigate(Screen.Actualities.route)
                     }
                 )
 
@@ -168,15 +175,23 @@ fun HomeScreenCard(
     }
 }
 
-
+/*
 @Preview
 @Composable
 fun HomeScreenPreview() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        graph = NavGraph()
+    )
     HomeScreen(
         temperature = 25,
         weatherDescription = "Slnečno",
         trashIcon = R.drawable.zbertko,
         trashDate = "24.4.2024",
         onCardClick = {
+
         })
 }
+
+ */

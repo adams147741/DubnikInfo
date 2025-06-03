@@ -6,5 +6,5 @@ data class NewsLine(
     val headline: String,
     val date: String,
     val text: String,
-    val modifier: Modifier = Modifier
+    val link: String,
 )

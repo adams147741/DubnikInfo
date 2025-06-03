@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.dubnikinfo"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -59,5 +59,8 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
     implementation("androidx.navigation:navigation-compose:2.5.3")
-
+    //implementation("com.kizitonwose.calendar:view:2.6.2")
+    implementation("com.kizitonwose.calendar:compose:2.6.2")
+    // jsoup HTML parser library @ https://jsoup.org/
+    implementation ("org.jsoup:jsoup:1.20.1")
 }
