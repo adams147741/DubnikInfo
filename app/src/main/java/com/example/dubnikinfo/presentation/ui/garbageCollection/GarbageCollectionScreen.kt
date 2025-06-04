@@ -1,11 +1,9 @@
 package com.example.dubnikinfo.presentation.ui.garbageCollection
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,14 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dubnikinfo.R
-import com.example.dubnikinfo.data.TrashType
+import com.example.dubnikinfo.data.local.thrash.TrashType
 import com.example.dubnikinfo.presentation.ui.TopBar.TopBar
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -35,15 +33,10 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Month
 import java.time.YearMonth
-import java.time.temporal.WeekFields
-import java.util.Locale
 
 @Composable
 fun GarbageCollectionScreen(
-    startMonth: YearMonth,
-    endMonth: YearMonth,
     events: Map<LocalDate, List<TrashType>>,
     onDayClick: (LocalDate, List<TrashType>) -> Unit,
     onBackClick: () -> Unit
@@ -58,8 +51,6 @@ fun GarbageCollectionScreen(
         content = { innerPadding ->
             Box(Modifier.padding(innerPadding)) {
                 TrashCalendar(
-                    startMonth = startMonth,
-                    endMonth = endMonth,
                     events = events,
                     onDayClick = onDayClick
                 )
@@ -70,15 +61,13 @@ fun GarbageCollectionScreen(
 
 @Composable
 fun TrashCalendar(
-    startMonth: YearMonth,
-    endMonth: YearMonth,
     events: Map<LocalDate, List<TrashType>>,
     onDayClick: (LocalDate, List<TrashType>) -> Unit
 ) {
     val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
-    val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
-    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
+    val startMonth = remember { currentMonth.minusMonths(12) }
+    val endMonth = remember { currentMonth.plusMonths(12) }
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -93,11 +82,10 @@ fun TrashCalendar(
             state = state,
             dayContent = { day ->
                 val types = events[day.date].orEmpty()
-                // If only using one TrashType per day, pick the first:
-                val type = types.firstOrNull() ?: TrashType.NONE
                 Day(
                     day = day,
-                    type = type,
+                    typeList = types,
+                    isToday = day.date == LocalDate.now(),
                 )
             },
             monthHeader = { month ->
@@ -110,12 +98,17 @@ fun TrashCalendar(
 @Composable
 fun Day(
     day: CalendarDay,
-    type: TrashType = TrashType.NONE
+    isToday: Boolean,
+    typeList: List<TrashType>
 ) {
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .padding(2.dp), // This is important for square sizing!
+            .padding(1.dp)
+            .border(
+                width = if (isToday) 2.dp else 1.dp,
+                color = if (isToday) Color.Red else Color.Gray,
+            ),
         contentAlignment = Alignment.Center
     ) {
         Column (
@@ -123,14 +116,19 @@ fun Day(
         )
         {
             Text(text = day.date.dayOfMonth.toString())
-            if (type != TrashType.NONE) {
-                val image = painterResource(type.id)
-                Spacer(modifier = Modifier.height(8.dp))
-                Image(
-                    painter = image,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxWidth()
-                )
+            if (typeList.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Row (
+                    modifier = Modifier.padding(bottom = 2.dp)
+                ) {
+                    typeList.forEach { type ->
+                        Image(
+                            painter = painterResource(type.id),
+                            contentDescription = null,
+                            modifier = Modifier
+                        )
+                    }
+                }
             }
         }
     }
@@ -154,7 +152,7 @@ fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
             Text(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
-                text = dayOfWeek.name/*dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),*/
+                text = dayOfWeek.name.take(3),
             )
         }
     }
@@ -168,8 +166,6 @@ fun GarbageCollectionScreenPreview() {
         LocalDate.of(2025, 5, 9) to listOf(TrashType.MUNICIPAL)
     )
     TrashCalendar(
-        startMonth = YearMonth.of(2025, 5),
-        endMonth = YearMonth.of(2025, 5),
         events = samplePickups,
         onDayClick = { _, _ -> }
     )

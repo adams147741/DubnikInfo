@@ -1,5 +1,7 @@
-package com.example.dubnikinfo.data
+package com.example.dubnikinfo.domain.repository
 
+import com.example.dubnikinfo.data.local.news.NewsLine
+import com.example.dubnikinfo.utils.parseDateToTimestamp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.IOException
@@ -19,7 +21,7 @@ class RssDataSource {
                 val description = it.selectFirst("description")?.text().orEmpty()
                 val link = it.selectFirst("link")?.text().orEmpty()
 
-                NewsLine(title, date, description, link)
+                NewsLine(title = title,date = date,description = description,link = link,dateStamp = parseDateToTimestamp(date))
             }
         } catch (e : IOException) {
             emptyList()

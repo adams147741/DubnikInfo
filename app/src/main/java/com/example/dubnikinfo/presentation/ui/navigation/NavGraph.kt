@@ -4,17 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dubnikinfo.R
-import com.example.dubnikinfo.data.NewsRepositoryImpl
-import com.example.dubnikinfo.data.RssDataSource
-import com.example.dubnikinfo.data.TrashType
+import com.example.dubnikinfo.data.DefaultAppContainer
+import com.example.dubnikinfo.data.local.thrash.TrashType
 import com.example.dubnikinfo.presentation.ui.actualities.ActualitiesScreen
 import com.example.dubnikinfo.presentation.ui.actualities.NewsViewModel
 import com.example.dubnikinfo.presentation.ui.garbageCollection.GarbageCollectionScreen
-import com.example.dubnikinfo.presentation.ui.garbageCollection.GarbageCollectionScreenPreview
 import com.example.dubnikinfo.presentation.ui.home.HomeScreen
 import java.time.LocalDate
 import java.time.YearMonth
@@ -22,6 +21,8 @@ import java.time.YearMonth
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
+    val context = LocalContext.current.applicationContext
+    val appContainer = remember { DefaultAppContainer(context) }
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route
@@ -37,20 +38,14 @@ fun AppNavHost() {
             )
         }
         composable(Screen.Actualities.route) {
-            // Create or retrieve the ViewModel
             val viewModel = remember {
                 NewsViewModel(
-                    NewsRepositoryImpl(RssDataSource())
+                    appContainer.newsRepository
                 )
             }
 
-            // Observe the state
             val news by viewModel.news.collectAsState()
 
-            // Filter only "Úradná tabuľa" items
-            //val officialBoardNews = news.filter { it.category == "Úradná tabuľa" }
-
-            // Pass the filtered list to the screen
             ActualitiesScreen(
                 news = news,
                 onBackClick = {
@@ -60,11 +55,9 @@ fun AppNavHost() {
         }
         composable(Screen.Trash.route) {
             GarbageCollectionScreen(
-                startMonth = YearMonth.of(2025, 5),
-                endMonth = YearMonth.of(2025, 5),
                 events = mapOf(
-                    LocalDate.of(2025, 5, 6) to listOf(TrashType.MUNICIPAL),
-                    LocalDate.of(2025, 5, 9) to listOf(TrashType.MUNICIPAL)
+                    LocalDate.of(2025, 6, 6) to listOf(TrashType.MUNICIPAL),
+                    LocalDate.of(2025, 6, 10) to listOf(TrashType.MUNICIPAL, TrashType.GLASS),
                 ),
                 onDayClick = { _, _ -> },
                 onBackClick = {

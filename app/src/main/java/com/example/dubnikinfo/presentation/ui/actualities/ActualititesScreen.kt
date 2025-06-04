@@ -23,9 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dubnikinfo.R
-import com.example.dubnikinfo.data.NewsLine
+import com.example.dubnikinfo.data.local.news.NewsLine
 import com.example.dubnikinfo.presentation.ui.TopBar.TopBar
 import androidx.core.net.toUri
+import com.example.dubnikinfo.utils.formatTimestampToString
 
 @Composable
 fun ActualitiesScreen(
@@ -50,10 +51,15 @@ fun ActualitiesScreen(
                 LazyColumn(
                 ) {
                     items(news) { item ->
+                        val formatedDate: String = if (item.dateStamp != null) {
+                            formatTimestampToString(item.dateStamp)
+                        } else {
+                            item.date
+                        }
                         NewsCard(
-                            headline = item.headline,
-                            date = item.date,
-                            text = item.text,
+                            headline = item.title,
+                            date = formatedDate,
+                            text = item.description,
                             link = item.link,
                             onClick = {
                                 val intent = Intent(Intent.ACTION_VIEW, item.link.toUri())
@@ -116,9 +122,9 @@ fun NewsCard(
 @Composable
 fun ActualitiesPreview() {
     val fakeData = listOf(
-        NewsLine("Veľkonočné prianie obce pre všetkých občanov", "16.04.2025", "Obecný úrad praje všetkým občanom požehnané a radostné veľkonočné sviatky. Nech je táto jar plná sily, zdravia a pohody v kruhu najbližších. Starosta, poslanci obecného zastupiteľstva a zamestnanci obecného úradu sa pripájajú k prianiu.", "google.com"),
-        NewsLine("Obecný úrad v Dubníku bude dňa 17.04.2025 ZATVORENÝ", "15.04.2025", "Oznamujeme občanom, že dňa 17 apríla 2025 – vo štvrtok bude obecný úrad v Dubníku z organizačno-technických dôvodov zatvorený. Tájékoztatjuk a lakosságot, hogy 2025. április 17-én - csütörtökön a Csúzi községi hivatal szervezési okokból zárva lesz.", "google.com"),
-        NewsLine("Veľkonočné trhy v Dubníku s kultúrnym programom", "08.04.2025", "Základná škola s materskou školou v Dubníku a obec Dubník srdečne pozývajú na Veľkonočné trhy, ktoré sa uskutočnia 12. apríla 2025 od 13.00 do 16.00 hod. v budove školy. Pripravený je aj krátky kultúrny program. Tešíme sa na vašu účasť!", "google.com")
+        NewsLine("Veľkonočné prianie obce pre všetkých občanov", date = "16.04.2025", description = "Obecný úrad praje všetkým občanom požehnané a radostné veľkonočné sviatky. Nech je táto jar plná sily, zdravia a pohody v kruhu najbližších. Starosta, poslanci obecného zastupiteľstva a zamestnanci obecného úradu sa pripájajú k prianiu.",link = "google.com", dateStamp = null),
+        NewsLine("Obecný úrad v Dubníku bude dňa 17.04.2025 ZATVORENÝ", date = "15.04.2025", description = "Oznamujeme občanom, že dňa 17 apríla 2025 – vo štvrtok bude obecný úrad v Dubníku z organizačno-technických dôvodov zatvorený. Tájékoztatjuk a lakosságot, hogy 2025. április 17-én - csütörtökön a Csúzi községi hivatal szervezési okokból zárva lesz.", link = "google.com", dateStamp = null),
+        NewsLine("Veľkonočné trhy v Dubníku s kultúrnym programom", date ="08.04.2025", description = "Základná škola s materskou školou v Dubníku a obec Dubník srdečne pozývajú na Veľkonočné trhy, ktoré sa uskutočnia 12. apríla 2025 od 13.00 do 16.00 hod. v budove školy. Pripravený je aj krátky kultúrny program. Tešíme sa na vašu účasť!", link = "google.com", dateStamp = null)
     )
     ActualitiesScreen(news = fakeData, onBackClick = {})
 }
