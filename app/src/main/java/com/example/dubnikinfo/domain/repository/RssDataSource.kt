@@ -1,5 +1,6 @@
-package com.example.dubnikinfo.data
+package com.example.dubnikinfo.domain.repository
 
+import com.example.dubnikinfo.data.local.NewsLine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.IOException

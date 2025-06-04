@@ -2,7 +2,7 @@ package com.example.dubnikinfo.presentation.ui.actualities
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dubnikinfo.data.NewsLine
+import com.example.dubnikinfo.data.local.NewsLine
 import com.example.dubnikinfo.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            _news.value = repository.getActualities()
+            _news.value = repository.getCurrentActualities()
         }
     }
 }

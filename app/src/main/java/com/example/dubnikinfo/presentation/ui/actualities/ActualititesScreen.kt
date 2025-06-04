@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dubnikinfo.R
-import com.example.dubnikinfo.data.NewsLine
+import com.example.dubnikinfo.data.local.NewsLine
 import com.example.dubnikinfo.presentation.ui.TopBar.TopBar
 import androidx.core.net.toUri
 
@@ -51,9 +51,9 @@ fun ActualitiesScreen(
                 ) {
                     items(news) { item ->
                         NewsCard(
-                            headline = item.headline,
+                            headline = item.title,
                             date = item.date,
-                            text = item.text,
+                            text = item.description,
                             link = item.link,
                             onClick = {
                                 val intent = Intent(Intent.ACTION_VIEW, item.link.toUri())

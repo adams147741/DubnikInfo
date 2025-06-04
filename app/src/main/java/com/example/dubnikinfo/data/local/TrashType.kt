@@ -1,4 +1,4 @@
-package com.example.dubnikinfo.data
+package com.example.dubnikinfo.data.local
 
 import androidx.annotation.DrawableRes
 import com.example.dubnikinfo.R
