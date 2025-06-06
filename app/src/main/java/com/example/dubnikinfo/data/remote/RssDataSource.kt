@@ -1,4 +1,4 @@
-package com.example.dubnikinfo.domain.repository
+package com.example.dubnikinfo.data.remote
 
 import com.example.dubnikinfo.data.local.news.NewsLine
 import com.example.dubnikinfo.utils.parseDateToTimestamp

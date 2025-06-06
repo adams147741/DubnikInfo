@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dubnikinfo.R
-import com.example.dubnikinfo.data.local.thrash.TrashType
+import com.example.dubnikinfo.data.local.trash.TrashType
 import com.example.dubnikinfo.presentation.ui.TopBar.TopBar
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -37,10 +39,11 @@ import java.time.YearMonth
 
 @Composable
 fun GarbageCollectionScreen(
-    events: Map<LocalDate, List<TrashType>>,
+    viewModel: GarbageViewModel,
     onDayClick: (LocalDate, List<TrashType>) -> Unit,
     onBackClick: () -> Unit
 ) {
+    val pickups by viewModel.pickups.collectAsState()
     Scaffold (
         topBar = {
             TopBar(
@@ -51,7 +54,7 @@ fun GarbageCollectionScreen(
         content = { innerPadding ->
             Box(Modifier.padding(innerPadding)) {
                 TrashCalendar(
-                    events = events,
+                    events = pickups,
                     onDayClick = onDayClick
                 )
             }

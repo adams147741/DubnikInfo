@@ -21,32 +21,35 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import com.example.dubnikinfo.R
 import com.example.dubnikinfo.presentation.ui.navigation.Screen
+import com.example.dubnikinfo.utils.formatLocalDateToString
 
 @Composable
 fun HomeScreen (
-    temperature: Int,
-    weatherDescription: String,
-    trashIcon: Int,
-    trashDate: String,
-    modifier: Modifier = Modifier,
     onCardClick: () -> Unit,
     navController: NavController,
+    homeViewModel: HomeViewModel
 ) {
+    val temperature by homeViewModel.temperature.collectAsState()
+    val trashMap by homeViewModel.firstPickups.collectAsState()
+    val firstDate = trashMap.keys.firstOrNull()
+    var dateText = "Žiadne zbery"
+    if (firstDate != null) {
+        dateText = formatLocalDateToString(firstDate)
+    }
+    val trashType = trashMap[firstDate]
     Scaffold(
         content = { innerPadding ->
             val context = LocalContext.current
@@ -76,20 +79,15 @@ fun HomeScreen (
                                 fontSize = 40.sp,
                             )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Box() {
-                            Text (
-                                text = weatherDescription,
-                                fontSize = 20.sp,
-                            )
-                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Card(
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        navController.navigate(Screen.Trash.route)
-                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(Screen.Trash.route)
+                        },
                     shape = MaterialTheme.shapes.medium,
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
@@ -100,23 +98,27 @@ fun HomeScreen (
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Image(
-                            painter = painterResource(id = trashIcon),
-                            contentDescription = null,
-                            modifier = Modifier.size(60.dp)
-                        )
+                        Column() {
+                            trashType?.forEach { type ->
+                                Image(
+                                    painter = painterResource(type.id),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(60.dp)
+                                )
+                            }
+                        }
                         Column (
                             modifier = Modifier.padding(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ){
                             Text(
-                                text = "Najbližší vývoz",
+                                text = stringResource(R.string.closest_pickup),
                                 fontSize = 25.sp,
                                 fontWeight = FontWeight.Bold
                                 )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = trashDate,
+                                text = dateText,
                                 fontSize = 22.sp,
                             )
                         }
@@ -174,24 +176,3 @@ fun HomeScreenCard(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        graph = NavGraph()
-    )
-    HomeScreen(
-        temperature = 25,
-        weatherDescription = "Slnečno",
-        trashIcon = R.drawable.zbertko,
-        trashDate = "24.4.2024",
-        onCardClick = {
-
-        })
-}
-
- */

@@ -4,11 +4,13 @@ import com.example.dubnikinfo.data.local.news.NewsDao
 import com.example.dubnikinfo.data.local.news.NewsLine
 import com.example.dubnikinfo.data.local.news.toNewsLine
 import com.example.dubnikinfo.data.local.news.toEntity
+import com.example.dubnikinfo.data.remote.RssDataSource
 
 interface NewsRepository {
     suspend fun getCurrentActualities(): List<NewsLine>
     suspend fun getOnlineActualities(): List<NewsLine>
     suspend fun getLocalActualities(): List<NewsLine>
+    suspend fun update()
 }
 
 class NewsRepositoryImpl(
@@ -32,5 +34,10 @@ class NewsRepositoryImpl(
     override suspend fun getLocalActualities(): List<NewsLine> {
         val loadedNews = newsDao.getAll()
         return loadedNews.map { it.toNewsLine() }
+    }
+    override suspend fun update() {
+        val loadedNews = rssDataSource.fetchActualities()
+        newsDao.deleteAll()
+        newsDao.insertAll(loadedNews.map { it.toEntity() })
     }
 }
