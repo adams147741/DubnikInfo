@@ -45,7 +45,7 @@ fun HomeScreen (
     val temperature by homeViewModel.temperature.collectAsState()
     val trashMap by homeViewModel.firstPickups.collectAsState()
     val firstDate = trashMap.keys.firstOrNull()
-    var dateText = "Žiadne zbery"
+    var dateText = stringResource(R.string.no_pickups)
     if (firstDate != null) {
         dateText = formatLocalDateToString(firstDate)
     }
@@ -136,7 +136,13 @@ fun HomeScreen (
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                HomeScreenCard(R.drawable.map_icon, stringResource(R.string.places))
+                HomeScreenCard(
+                    R.drawable.map_icon,
+                    stringResource(R.string.places),
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screen.Places.route)
+                    }
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
 

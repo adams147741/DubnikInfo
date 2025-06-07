@@ -1,7 +1,6 @@
 package com.example.dubnikinfo.data.remote
 
 import android.util.Log
-import com.example.dubnikinfo.data.local.trash.TrashEntity
 import com.example.dubnikinfo.data.local.trash.TrashPickup
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await

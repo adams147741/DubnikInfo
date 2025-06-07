@@ -5,6 +5,7 @@ import com.example.dubnikinfo.data.local.AppDatabase
 import com.example.dubnikinfo.domain.repository.NewsRepository
 import com.example.dubnikinfo.data.remote.RssDataSource
 import androidx.room.Room
+import com.example.dubnikinfo.data.remote.FirebasePlaces
 import com.example.dubnikinfo.data.remote.FirebaseTrash
 import com.example.dubnikinfo.data.remote.WeatherApi
 import com.example.dubnikinfo.domain.repository.NewsRepositoryImpl
@@ -14,11 +15,14 @@ import com.example.dubnikinfo.domain.repository.WeatherRepository
 import com.example.dubnikinfo.domain.repository.WeatherRepositoryImpl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.dubnikinfo.domain.repository.PlacesRepository
+import com.example.dubnikinfo.domain.repository.PlacesRepositoryImpl
 
 interface AppContainer {
     val newsRepository: NewsRepository
     val trashRepository: TrashRepository
     val weatherRepository: WeatherRepository
+    val placesRepository: PlacesRepository
 }
 
 class DefaultAppContainer(context: Context) : AppContainer {
@@ -51,4 +55,8 @@ class DefaultAppContainer(context: Context) : AppContainer {
             weatherApi
         )
 
+    override val placesRepository: PlacesRepository =
+        PlacesRepositoryImpl(
+            FirebasePlaces()
+        )
 }

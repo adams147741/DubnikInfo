@@ -5,6 +5,7 @@ import com.example.dubnikinfo.data.remote.WeatherApi
 
 interface WeatherRepository {
     suspend fun getLocalTemperature(lat: Double, lon: Double): Double?
+    suspend fun updateTemperature(lat: Double, lon: Double)
 }
 
 class WeatherRepositoryImpl(
@@ -26,5 +27,9 @@ class WeatherRepositoryImpl(
             Log.d("WeatherRepository", "getLocalTemperature: $e")
             null
         }
+    }
+
+    override suspend fun updateTemperature(lat: Double, lon: Double) {
+        val temp = weatherApi.getCurrentWeather(lat, lon).current_weather.temperature
     }
 }

@@ -18,6 +18,8 @@ import com.example.dubnikinfo.presentation.ui.garbageCollection.GarbageCollectio
 import com.example.dubnikinfo.presentation.ui.garbageCollection.GarbageViewModel
 import com.example.dubnikinfo.presentation.ui.home.HomeScreen
 import com.example.dubnikinfo.presentation.ui.home.HomeViewModel
+import com.example.dubnikinfo.presentation.ui.places.PlaceMapScreen
+import com.example.dubnikinfo.presentation.ui.places.PlaceViewModel
 import java.time.LocalDate
 
 @Composable
@@ -48,6 +50,14 @@ fun AppNavHost() {
             GarbageCollectionScreen(
                 viewModel = GarbageViewModel(appContainer.trashRepository),
                 onDayClick = { _, _ -> },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(Screen.Places.route) {
+            PlaceMapScreen(
+                viewModel = PlaceViewModel(appContainer.placesRepository),
                 onBackClick = {
                     navController.popBackStack()
                 }

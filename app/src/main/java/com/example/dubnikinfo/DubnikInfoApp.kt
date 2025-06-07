@@ -16,6 +16,7 @@ class DubnikInfoApp : Application() {
         appContainer = DefaultAppContainer(this)
         applicationScope.launch {
             appContainer.trashRepository.getTrashOnline()
+            appContainer.weatherRepository.updateTemperature(47.9571, 18.4111)
         }
         NotificationWorker.schedule(this)
     }

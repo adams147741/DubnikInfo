@@ -6,4 +6,6 @@
     <string name="trash_collection">Vývoz odpadu</string>
     <string name="No_actualities">Prebieha načítavanie alebo nastala chyba!</string>
     <string name="closest_pickup">Najbližší vývoz</string>
+    <string name="no_pickups">Žiadne zbery</string>
+    <string name="map">Mapa</string>
 </resources>

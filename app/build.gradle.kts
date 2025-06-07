@@ -4,6 +4,11 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.0.21-1.0.27"
     id("com.google.gms.google-services") version "4.4.2" apply true
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
+
+configurations.all {
+    exclude(group = "com.intellij", module = "annotations")
 }
 
 android {
@@ -16,7 +21,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -56,6 +60,8 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.media3.common.ktx)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.play.services.maps)
+    implementation(libs.androidx.room.compiler)
     //implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -79,4 +85,6 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.16.0")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("com.google.maps.android:maps-compose:2.12.0")
+    implementation("com.google.android.gms:play-services-maps:19.0.1")
 }
