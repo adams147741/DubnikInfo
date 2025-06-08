@@ -10,6 +10,10 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
     private val _news = MutableStateFlow<List<NewsLine>>(emptyList())
+
+    /**
+     * Returns the news
+     */
     val news: StateFlow<List<NewsLine>> = _news
 
     init {

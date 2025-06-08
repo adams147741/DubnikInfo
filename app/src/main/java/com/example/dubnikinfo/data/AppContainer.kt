@@ -25,6 +25,15 @@ interface AppContainer {
     val placesRepository: PlacesRepository
 }
 
+/**
+ * Default implementation of the AppContainer interface
+ * @param context Context - the application context
+ * @return DefaultAppContainer - the default app container
+ * @return NewsRepository - the news repository
+ * @return TrashRepository - the trash repository
+ * @return WeatherRepository - the weather repository
+ * @return PlacesRepository - the places repository
+ */
 class DefaultAppContainer(context: Context) : AppContainer {
     private val database = Room.databaseBuilder(
         context.applicationContext,
@@ -32,29 +41,44 @@ class DefaultAppContainer(context: Context) : AppContainer {
         "app_database"
     ).fallbackToDestructiveMigration(true).build()
 
+    /**
+     * Returns the news repository
+     */
     override val newsRepository: NewsRepository =
         NewsRepositoryImpl(
             RssDataSource(),
             database.newsDao()
         )
 
+    /**
+     * Returns the trash repository
+     */
     override val trashRepository: TrashRepository =
         TrashRepositoryImpl(
             database.thrashDao(),
             FirebaseTrash()
         )
 
+    /**
+     * Returns the weather repository and initiates it with the Open-Meteo API
+     */
     private val weatherApi: WeatherApi = Retrofit.Builder()
         .baseUrl("https://api.open-meteo.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(WeatherApi::class.java)
 
+    /**
+     * Returns the weather repository
+     */
     override val weatherRepository: WeatherRepository =
         WeatherRepositoryImpl(
             weatherApi
         )
 
+    /**
+     * Returns the places repository
+     */
     override val placesRepository: PlacesRepository =
         PlacesRepositoryImpl(
             FirebasePlaces()

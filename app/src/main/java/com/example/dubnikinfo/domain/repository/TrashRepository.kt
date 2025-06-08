@@ -27,10 +27,17 @@ class TrashRepositoryImpl(
     private val remote: FirebaseTrash
 ) : TrashRepository {
 
+    /**
+     * Inserts a trash pickup into the local database
+     * @param trash TrashEntity - the trash pickup to be inserted
+     */
     override suspend fun insertTrash(trash: TrashEntity) {
         trashDao.insertTrash(trash)
     }
 
+    /**
+     * Gets trash pickups from the remote database and inserts them into the local database
+     */
     override suspend fun getTrashOnline() {
         val trashList = remote.getTrashPickups()
         if (trashList.isNotEmpty()) {
@@ -41,6 +48,11 @@ class TrashRepositoryImpl(
         }
     }
 
+    /**
+     * Returns a map of trash pickups grouped by date
+     * Uses local database first if available
+     * @return Map<LocalDate, List<TrashType>> - a map of trash pickups grouped by date
+     */
     override suspend fun getTrashMap(): Map<LocalDate, List<TrashType>> {
         if (trashDao.getTrash().isEmpty()) {
             getTrashOnline()
@@ -56,6 +68,10 @@ class TrashRepositoryImpl(
         return trashMap
     }
 
+    /**
+     * Returns a map of trash pickups on the closest day from today
+     * @return Map<LocalDate, List<TrashType>> - a map of trash pickups grouped by date
+     */
     override suspend fun getFirstPickups(): Map<LocalDate, List<TrashType>> {
         val closestDay = trashDao.getClosestTrashDate(System.currentTimeMillis() / 1000)
         if (closestDay != null) {

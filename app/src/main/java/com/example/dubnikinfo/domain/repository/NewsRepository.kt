@@ -17,6 +17,10 @@ class NewsRepositoryImpl(
     private val rssDataSource: RssDataSource,
     private val newsDao: NewsDao,
 ) : NewsRepository {
+    /**
+     * Returns a list of news lines
+     * @return List<NewsLine>
+     */
     override suspend fun getCurrentActualities(): List<NewsLine>{
         val loadedNews = rssDataSource.fetchActualities()
         if (loadedNews.isNotEmpty()) {
@@ -27,14 +31,28 @@ class NewsRepositoryImpl(
             return newsDao.getAll().map { it.toNewsLine() }
         }
     }
+
+    /**
+     * Returns a list of news lines from the online source
+     * @return List<NewsLine>
+     */
     override suspend fun getOnlineActualities(): List<NewsLine> {
         val loadedNews = rssDataSource.fetchActualities()
         return loadedNews
     }
+
+    /**
+     * Returns a list of news lines from the local source
+     * @return List<NewsLine>
+     */
     override suspend fun getLocalActualities(): List<NewsLine> {
         val loadedNews = newsDao.getAll()
         return loadedNews.map { it.toNewsLine() }
     }
+
+    /**
+     * Updates the local database with the news from the online source
+     */
     override suspend fun update() {
         val loadedNews = rssDataSource.fetchActualities()
         newsDao.deleteAll()

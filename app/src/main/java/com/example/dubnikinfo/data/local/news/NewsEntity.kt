@@ -14,10 +14,16 @@ data class NewsEntity(
     val description: String,
 )
 
+/**
+ * Converts a NewsEntity to a NewsLine
+ */
 fun NewsEntity.toNewsLine(): NewsLine {
     return NewsLine(title = title, date = date, description = description, link = link, dateStamp = parseDateToTimestamp(date))
 }
 
+/**
+ * Converts a NewsLine to a NewsEntity
+ */
 fun NewsLine.toEntity(): NewsEntity {
     return NewsEntity(title = title, date = date, description = description, link = link, dateStamp = parseDateToTimestamp(date))
 }

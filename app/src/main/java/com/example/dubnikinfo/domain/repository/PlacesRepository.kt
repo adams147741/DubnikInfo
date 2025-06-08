@@ -10,6 +10,10 @@ interface PlacesRepository {
 class PlacesRepositoryImpl(
     private val firebasePlaces: FirebasePlaces
 ) : PlacesRepository {
+    /**
+     * Returns a list of interesting places from firebase
+     * @return List<Place> - a list of interesting places
+     */
     override suspend fun getPlaces(): List<Place> {
         val places = firebasePlaces.getPlaces()
         return places

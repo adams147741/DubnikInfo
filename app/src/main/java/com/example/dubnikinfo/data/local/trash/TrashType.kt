@@ -3,6 +3,13 @@ package com.example.dubnikinfo.data.local.trash
 import androidx.annotation.DrawableRes
 import com.example.dubnikinfo.R
 
+/**
+ * Enum class representing a trash type
+ * @param id Int - the drawable resource id
+ * @param enumId Int - the enum id
+ * @param title Int - the string resource id
+ * @return TrashType - the trash type
+ */
 enum class TrashType(@DrawableRes val id: Int, val enumId: Int, val title: Int) {
     NONE(0, 0, R.string.None),
     MUNICIPAL(R.drawable.zbertko, 1, R.string.municipal_waste),

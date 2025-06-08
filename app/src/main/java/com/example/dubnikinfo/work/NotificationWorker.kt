@@ -15,6 +15,9 @@ import com.example.dubnikinfo.R
 import com.example.dubnikinfo.data.local.trash.TrashType
 import java.util.concurrent.TimeUnit
 
+/**
+ * Worker class for sending notifications
+ */
 class NotificationWorker (
     context: Context,
     params: WorkerParameters
@@ -23,6 +26,9 @@ class NotificationWorker (
     private val newsRepository = appContainer.newsRepository
     private val trashRepository = appContainer.trashRepository
 
+    /**
+     * Executes the worker
+     */
     override suspend fun doWork(): Result {
         createNotificationChannel()
 
@@ -52,6 +58,9 @@ class NotificationWorker (
         return Result.success()
     }
 
+    /**
+     * Creates a notification channel
+     */
     private fun createNotificationChannel() {
         val name = "App Notificatons"
         val descriptionText = "Notification desc"
@@ -61,6 +70,9 @@ class NotificationWorker (
         notificationManager.createNotificationChannel(channel)
     }
 
+    /**
+     * Sends a notification
+     */
     private fun sendNotification(title: String, message: String, @androidx.annotation.DrawableRes icon: Int) {
         val notification = NotificationCompat.Builder(applicationContext, "default").
         setContentTitle(title).
@@ -71,6 +83,9 @@ class NotificationWorker (
         notificationManager.notify(title.hashCode(), notification)
     }
 
+    /**
+     * Schedules the worker
+     */
     companion object {
         fun schedule(context: Context) {
             val request =

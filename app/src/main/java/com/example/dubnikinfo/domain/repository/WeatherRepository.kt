@@ -14,6 +14,12 @@ class WeatherRepositoryImpl(
 
     private var latestTemperature: Double? = null
 
+    /**
+     * Returns current temperature from local cache or from API
+     * @param lat Double - latitude of the location
+     * @param lon Double - longitude of the location
+     * @return Double? - temperature in Celsius
+     */
     override suspend fun getLocalTemperature(lat: Double, lon: Double): Double? {
         if (latestTemperature != null) {
             return latestTemperature
@@ -29,6 +35,9 @@ class WeatherRepositoryImpl(
         }
     }
 
+    /**
+     * Updates current temperature from API into local cache
+     */
     override suspend fun updateTemperature(lat: Double, lon: Double) {
         try {
             latestTemperature = weatherApi.getCurrentWeather(lat, lon).current_weather.temperature
