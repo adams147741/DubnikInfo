@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.dubnikinfo.R
 import com.example.dubnikinfo.utils.LatLngSaver
+import com.example.dubnikinfo.utils.LocalCoordinates
 import com.google.android.gms.maps.CameraUpdateFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -49,7 +50,7 @@ fun PlaceMapScreen(
     val placeList by viewModel.places.collectAsState()
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(
-            LatLng(47.9571, 18.4111), 15f)
+            LatLng(LocalCoordinates.latitude, LocalCoordinates.longitude), 15f)
     }
     var selectedPOI by remember { mutableStateOf<PointOfInterest?>(null) }
     var selectedPlace by rememberSaveable(stateSaver = LatLngSaver) { mutableStateOf<LatLng?>(null) }
