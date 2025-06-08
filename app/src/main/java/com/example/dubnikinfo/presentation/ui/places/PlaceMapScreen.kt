@@ -38,7 +38,6 @@ import com.example.dubnikinfo.R
 import com.example.dubnikinfo.utils.LatLngSaver
 import com.google.android.gms.maps.CameraUpdateFactory
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable

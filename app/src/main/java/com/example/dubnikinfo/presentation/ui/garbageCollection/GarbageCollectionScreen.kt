@@ -2,6 +2,8 @@ package com.example.dubnikinfo.presentation.ui.garbageCollection
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,18 +18,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.dubnikinfo.R
 import com.example.dubnikinfo.data.local.trash.TrashType
 import com.example.dubnikinfo.presentation.ui.TopBar.TopBar
+import com.example.dubnikinfo.utils.formatLocalDateToString
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -52,11 +59,26 @@ fun GarbageCollectionScreen(
             )
         },
         content = { innerPadding ->
+            var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+            var selectedTypes by remember { mutableStateOf<List<TrashType>>(emptyList()) }
             Box(Modifier.padding(innerPadding)) {
                 TrashCalendar(
                     events = pickups,
-                    onDayClick = onDayClick
+                    onDayClick = { date, types ->
+                        selectedDate = date
+                        selectedTypes = types
+                    }
                 )
+                if (selectedDate != null && selectedTypes.isNotEmpty()) {
+                    TrashTypeDialog(
+                        date = selectedDate!!,
+                        types = selectedTypes,
+                        onDismiss = {
+                            selectedDate = null
+                            selectedTypes = emptyList()
+                        }
+                    )
+                }
             }
         }
     )
@@ -65,7 +87,7 @@ fun GarbageCollectionScreen(
 @Composable
 fun TrashCalendar(
     events: Map<LocalDate, List<TrashType>>,
-    onDayClick: (LocalDate, List<TrashType>) -> Unit
+    onDayClick: (LocalDate, List<TrashType>) -> Unit,
 ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(12) }
@@ -89,6 +111,7 @@ fun TrashCalendar(
                     day = day,
                     typeList = types,
                     isToday = day.date == LocalDate.now(),
+                    onDayClick = onDayClick
                 )
             },
             monthHeader = { month ->
@@ -102,7 +125,8 @@ fun TrashCalendar(
 fun Day(
     day: CalendarDay,
     isToday: Boolean,
-    typeList: List<TrashType>
+    typeList: List<TrashType>,
+    onDayClick: (LocalDate, List<TrashType>) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -116,6 +140,7 @@ fun Day(
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable { onDayClick(day.date, typeList) }
         )
         {
             Text(text = day.date.dayOfMonth.toString())
@@ -159,6 +184,54 @@ fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
             )
         }
     }
+}
+
+@Composable
+fun TrashTypeDialog(
+    date: LocalDate,
+    types: List<TrashType>,
+    onDismiss: () -> Unit
+) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = stringResource(R.string.trash_collection) + " " + formatLocalDateToString(date)) },
+        text = {
+            Column {
+                Text(
+                    text = stringResource(R.string.trash_types),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                )
+                types.forEach { type ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(type.id),
+                            contentDescription = null,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                        Text(
+                            text = stringResource(type.title),
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Text(
+                text = stringResource(R.string.ok),
+                modifier = Modifier
+                    .clickable { onDismiss() }
+                    .padding(8.dp)
+            )
+        }
+    )
 }
 
 @Composable

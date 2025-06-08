@@ -5,5 +5,4 @@ sealed class Screen(val route: String) {
     object Actualities : Screen("actualities")
     object Trash : Screen("trash")
     object Places : Screen("places")
-    object Reports : Screen("reports")
 }

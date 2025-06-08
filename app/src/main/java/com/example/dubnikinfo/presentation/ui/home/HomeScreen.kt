@@ -143,10 +143,6 @@ fun HomeScreen (
                         navController.navigate(Screen.Places.route)
                     }
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                HomeScreenCard(R.drawable.report_icon, stringResource(R.string.reports))
             }
         }
     )

@@ -19,6 +19,8 @@
     <string name="electronic_waste">Elektronika</string>
     <string name="clothing_waste">Oblečenie</string>
     <string name="biological_waste">Biologický</string>
-    <string name="cooking_oil_waste">Kuchyský olej</string>
+    <string name="cooking_oil_waste">Kuchynský olej</string>
     <string name="paper_waste">Papier</string>
+    <string name="ok">OK</string>
+    <string name="trash_types">Typy odpadu:</string>
 </resources>
