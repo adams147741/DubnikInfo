@@ -30,6 +30,10 @@ class WeatherRepositoryImpl(
     }
 
     override suspend fun updateTemperature(lat: Double, lon: Double) {
-        val temp = weatherApi.getCurrentWeather(lat, lon).current_weather.temperature
+        try {
+            latestTemperature = weatherApi.getCurrentWeather(lat, lon).current_weather.temperature
+        } catch (e: Exception) {
+            Log.d("WeatherRepository", "updateTemperature: $e")
+        }
     }
 }

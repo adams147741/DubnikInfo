@@ -3,6 +3,7 @@ package com.example.dubnikinfo.work
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -28,24 +29,24 @@ class NotificationWorker (
         val localNews = newsRepository.getLocalActualities()
         val remoteNews = newsRepository.getOnlineActualities()
         if (localNews.size < remoteNews.size) {
-            var message = "Na stránke pribudli nové aktuality!"
+            var message = applicationContext.getString(R.string.new_actualities_appeared)
             if (remoteNews.size - localNews.size == 1) {
                 message = remoteNews.first().title
             }
-            sendNotification("Nové aktuality", message, R.drawable.mun_logo)
+            sendNotification(applicationContext.getString(R.string.new_actualities), message, R.drawable.mun_logo)
             newsRepository.update()
         }
 
         val closestTrash: List<TrashType> = trashRepository.getFirstPickups().values.flatten()
-        var message = "Typ odpadu: "
-        if (closestTrash.size > 0) {
+        var message = applicationContext.getString(R.string.trash_type)
+        if (closestTrash.isNotEmpty()) {
             closestTrash.forEach { trashType ->
-                message += trashType.title + ", "
+                message += applicationContext.getString(trashType.title) + ", "
             }
             if (closestTrash.size > 1) {
-                sendNotification("Nezabudni na smeti!", message, R.drawable.mun_logo)
+                sendNotification(applicationContext.getString(R.string.trash_reminder), message, R.drawable.mun_logo)
             } else {
-                sendNotification("Nezabudni na smeti!", message, closestTrash[0].id)
+                sendNotification(applicationContext.getString(R.string.trash_reminder), message, closestTrash[0].id)
             }
         }
         return Result.success()
@@ -76,7 +77,7 @@ class NotificationWorker (
                 PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES).build()
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-                "minutely_notifications",
+                "notifications",
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
             )

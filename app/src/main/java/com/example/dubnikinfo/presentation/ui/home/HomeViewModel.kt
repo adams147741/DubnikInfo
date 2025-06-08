@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dubnikinfo.data.local.trash.TrashType
 import com.example.dubnikinfo.domain.repository.TrashRepository
 import com.example.dubnikinfo.domain.repository.WeatherRepository
+import com.example.dubnikinfo.utils.LocalCoordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class HomeViewModel(
     init {
         viewModelScope.launch {
             _firstPickups.value = trashRepository.getFirstPickups()
-            _temperature.value = weatherRepository.getLocalTemperature(47.9571, 18.4111)
+            _temperature.value = weatherRepository.getLocalTemperature(LocalCoordinates.latitude, LocalCoordinates.longitude)
         }
     }
 }

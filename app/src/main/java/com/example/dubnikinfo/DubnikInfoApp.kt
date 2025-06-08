@@ -3,6 +3,7 @@ package com.example.dubnikinfo
 import android.app.Application
 import com.example.dubnikinfo.data.AppContainer
 import com.example.dubnikinfo.data.DefaultAppContainer
+import com.example.dubnikinfo.utils.LocalCoordinates
 import com.example.dubnikinfo.work.NotificationWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +17,7 @@ class DubnikInfoApp : Application() {
         appContainer = DefaultAppContainer(this)
         applicationScope.launch {
             appContainer.trashRepository.getTrashOnline()
-            appContainer.weatherRepository.updateTemperature(47.9571, 18.4111)
+            appContainer.weatherRepository.updateTemperature(LocalCoordinates.latitude, LocalCoordinates.longitude)
         }
         NotificationWorker.schedule(this)
     }

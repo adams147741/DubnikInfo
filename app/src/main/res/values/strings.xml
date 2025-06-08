@@ -8,4 +8,17 @@
     <string name="closest_pickup">Najbližší vývoz</string>
     <string name="no_pickups">Žiadne zbery</string>
     <string name="map">Mapa</string>
+    <string name="trash_reminder">Nezabudni na smeti!</string>
+    <string name="trash_type">"Typ odpadu: "</string>
+    <string name="new_actualities">Nové aktuality</string>
+    <string name="new_actualities_appeared">Na stránke pribudli nové aktuality!</string>
+    <string name="None">Žiadny</string>
+    <string name="municipal_waste">Komunálny odpad</string>
+    <string name="plastic_waste">Plasty</string>
+    <string name="glass_waste">Sklo</string>
+    <string name="electronic_waste">Elektronika</string>
+    <string name="clothing_waste">Oblečenie</string>
+    <string name="biological_waste">Biologický</string>
+    <string name="cooking_oil_waste">Kuchyský olej</string>
+    <string name="paper_waste">Papier</string>
 </resources>
